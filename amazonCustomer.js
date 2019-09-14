@@ -26,6 +26,8 @@ function displayProducts() {
 
 }
 
+
+
 function customerPrompt() {
     inquirer.prompt({
 
@@ -77,7 +79,7 @@ function startShopping() {
                     type: "input",
                     message: "How many items of this quantity do you wish to purchase?",
                     validate: function (value) {
-                        if (isNaN(value)) {
+                        if (isNaN(value) || (value<1)) {
                             console.log(`\nPlease enter a valid number!`)
                             return false;
                         }
@@ -118,8 +120,8 @@ function updateInventory(prodId, quantId) {
             if (err) return err;
             if (quantId > res[0].stock_quantity) {
                 console.log("\n Insufficient quantity, please try again with what we have in stock!")
-                console.log("\n We will return you to the main menu shortly!")
-                setTimeout(displayProducts, 8000)
+                console.log("\n We will return you to the main menu shortly!\n")
+                setTimeout(displayProducts, 4000)
             }
             else {
                 connection.query(
@@ -138,7 +140,7 @@ function updateInventory(prodId, quantId) {
                             console.log(`\n Your grand total is $${quantId * res[0].price}`)
                             console.log("\n Thank you for your purchase!")
                             console.log(`\n We will soon prompt you if you would like to continue shopping!`)
-                            setTimeout(displayProducts, 8000)
+                            setTimeout(displayProducts, 4000)
                         })
                     }
                 )
