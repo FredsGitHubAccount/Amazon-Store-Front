@@ -11,8 +11,6 @@ let connection = mysql.createConnection({
 
 })
 
-
-
 function displayProducts() {
     connection.query(
         "SELECT * FROM products",
@@ -25,8 +23,6 @@ function displayProducts() {
 
 
 }
-
-
 
 function customerPrompt() {
     inquirer.prompt({
@@ -48,8 +44,6 @@ function customerPrompt() {
 }
 
 function startShopping() {
-
-
 
     connection.query(
         "SELECT * FROM products", function (err, res) {
