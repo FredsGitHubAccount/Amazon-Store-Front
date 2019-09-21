@@ -63,7 +63,7 @@ function addProduct() {
                     return true;
                 }
             }
-        ]).then(function (answer) {
+        ]).then(function(answer) {
             connection.query("INSERT INTO products SET ?",
                 {
                     product_name: answer.productname,
@@ -158,7 +158,7 @@ function managerPrompt() {
         name: "action",
         type: "list",
         choices: ["View_Inventory", "View_Low_Inventory", "Add_To_Inventory", "Add_New_Product", "EXIT"]
-    }).then(function (answer) {
+    }).then(function(answer) {
         if (answer.action === "View_Inventory") {
             displayInventory();
         } else if (answer.action === "View_Low_Inventory") {
