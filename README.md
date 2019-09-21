@@ -18,8 +18,8 @@ Back-End
 - [ ] MySQL
 
 ### Video Demo
-[![Amazon-Store-Front Demo](https://img.youtube.com/vi/9y51AoNSMfk/0.jpg)](https://youtu.be/9y51AoNSMfk)
-Correct video coming soon!
+[![Amazon-Store-Front Demo](https://img.youtube.com/vi/R5m683zdxiQ/0.jpg)](https://youtu.be/R5m683zdxiQ)
+
 
 ### Setup 
 ```
