@@ -83,7 +83,7 @@ function startShopping() {
                 }
 
 
-            ]).then(function (answer) {
+            ]).then(function(answer) {
 
                 let itemIdentity = answer.itemnumber;
                 let itemQuantity = answer.itemammount;
