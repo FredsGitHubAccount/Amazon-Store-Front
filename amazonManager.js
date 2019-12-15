@@ -11,7 +11,7 @@ let connection = mysql.createConnection({
 
 })
 
-function displayInventory() {
+let displayInventory = () => {
     connection.query(
         "SELECT * from products", function (err, res) {
             if (err) throw err;
@@ -22,8 +22,8 @@ function displayInventory() {
     )
 }
 
-function addProduct() {
-    inquirer.prompt(
+let addProduct = async () => {
+    let answer = await inquirer.prompt(
         [
             {
                 message: "What is the product you would like to add?",
@@ -63,7 +63,7 @@ function addProduct() {
                     return true;
                 }
             }
-        ]).then(function(answer) {
+        ])
             connection.query("INSERT INTO products SET ?",
                 {
                     product_name: answer.productname,
@@ -76,15 +76,14 @@ function addProduct() {
                     setTimeout(managerPrompt, 6000);
                 }
             )
-        })
-
+     
 }
 
-function addToInventory() {
-    connection.query("SELECT * FROM products", function (err, res) {
+let addToInventory = () => {
+    connection.query("SELECT * FROM products", async(err,res) => {
         if (err) throw err;
 
-        inquirer.prompt(
+       let answer = await inquirer.prompt(
             [
                 {
                     message: "What product ID are you increasing inventory for?",
@@ -94,7 +93,6 @@ function addToInventory() {
 
                         for (let i = 0; i < res.length; i++) {
                             if (value == res[i].item_id) {
-
                                 return true;
                             }
                         }
@@ -118,7 +116,7 @@ function addToInventory() {
                     }
                 }
             ]
-        ).then(function(answer) {
+        )
         
             connection.query("UPDATE products SET ? WHERE ?",
                 [
@@ -136,12 +134,12 @@ function addToInventory() {
                 }
             )
 
-        })
+   
     }
     )
 }
 
-function viewLowInventory(){
+const viewLowInventory = () => {
     connection.query(`SELECT * FROM PRODUCTS WHERE ?? <5`,"stock_quantity",function(err,res){
         if (err) throw err;
         console.table(res)
@@ -152,33 +150,55 @@ function viewLowInventory(){
 }
 
 
-function managerPrompt() {
-    inquirer.prompt({
+const managerPrompt = async () => {
+   let answer = await inquirer.prompt({
         message: "Hello Manager, What action would you like to perform?",
         name: "action",
         type: "list",
         choices: ["View_Inventory", "View_Low_Inventory", "Add_To_Inventory", "Add_New_Product", "EXIT"]
-    }).then(function(answer) {
-        if (answer.action === "View_Inventory") {
-            displayInventory();
-        } else if (answer.action === "View_Low_Inventory") {
-            viewLowInventory();
-        } else if (answer.action === "Add_To_Inventory") {
-            addToInventory();
-        } else if (answer.action === "Add_New_Product") {
-            addProduct();
-        } else if (answer.action === "EXIT") {
-            console.log("Thank you and have a great day!")
-            connection.end();
-        }
     })
+    
+    switch(answer.action){
+
+        case "View_Inventory":
+        displayInventory()
+        break;
+
+        case "View_Low_Inventory":
+        viewLowInventory()
+        break;
+
+        case "Add_To_Inventory":
+        addToInventory();
+        break;
+
+        case "Add_New_Product":
+        addProduct();
+        break;
+
+        default :
+        console.log("Thank you and have a great day!")
+        connection.end();
+
+    }
+    
 }
-
-
-
 connection.connect(function (err) {
     if (err) throw err;
-    console.log(connection.threadId)
     managerPrompt();
+    // testSelection();
 })
+
+// const testSelection = () =>{
+// connection.query(`SELECT * from products WHERE product_name = 'WoW Game Card'`,(err,res)=>{
+//     console.log(res)
+
+//     connection.query(`UPDATE products SET stock_quantity = ${res[0].stock_quantity + 5} WHERE product_name = 'WoW Game Card'`,(err,data)=>{
+//         console.log(data)
+//     })
+
+// })
+
+
+// }
 
