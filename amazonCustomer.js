@@ -11,10 +11,10 @@ let connection = mysql.createConnection({
 
 })
 
-function displayProducts() {
+let displayProducts = () => {
     connection.query(
         "SELECT * FROM products",
-        function (err, response) {
+        (err,response) => {
             if (err) throw err;
             console.table(response)
             console.log("\n^^^^^^^^^^^^^^^^ Look at our inventory above! ^^^^^^^^^^^^^^^^ \n")
@@ -24,32 +24,35 @@ function displayProducts() {
 
 }
 
-function customerPrompt() {
-    inquirer.prompt({
+let customerPrompt = async () => {
+    let answer = await inquirer.prompt({
 
         name: "shop",
         type: "list",
         message: "Welcome to Amazon! Would you like to shop with us today? Our inventory is posted above!",
         choices: ["YES", "NO"]
 
-    }).then(function (answer) {
-        if (answer.shop === "YES") {
+    })
+    switch(answer.shop){
+        case "YES":
             startShopping();
-        }
-        else {
+            break;
+
+        default:
             console.log(`\nHave a great day & hope to see you soon!\n`)
             connection.end();
-        }
-    })
+    }
+      
+  
 }
 
-function startShopping() {
+let startShopping =  () => {
 
     connection.query(
-        "SELECT * FROM products", function (err, res) {
+        "SELECT * FROM products", async(err,res)=> {
             if (err) throw err;
 
-            inquirer.prompt([
+            let answer = await inquirer.prompt([
                 {
                     name: "itemnumber",
                     type: "input",
@@ -83,7 +86,7 @@ function startShopping() {
                 }
 
 
-            ]).then(function(answer) {
+            ])
 
                 let itemIdentity = answer.itemnumber;
                 let itemQuantity = answer.itemammount;
@@ -91,7 +94,7 @@ function startShopping() {
                 console.log(`\n You have requested an order for item ${itemIdentity}, with the quantity of ${itemQuantity}`)
                 updateInventory(itemIdentity, itemQuantity)
 
-            })
+            
 
         }
     )
@@ -146,6 +149,5 @@ function updateInventory(prodId, quantId) {
 
 connection.connect(function (err) {
     if (err) throw err;
-
     displayProducts();
 });
